@@ -12,6 +12,10 @@ While this demo app shows you a conceptual way to auto-scale GitHub Actions Self
 
 ## Deploy to Docker
 
+You may use a pre-built example `jrsyo/nomad-github-runners-autoscaler:alpha` image on the Docker Hub, or build your own using the `Dockerfile` in this repository.
+
+- https://hub.docker.com/r/jrsyo/nomad-github-runners-autoscaler/tags
+
 ### Environment Variables
 
 The following environment variables should be passed accordingly to run this app container.
@@ -21,6 +25,17 @@ The following environment variables should be passed accordingly to run this app
 - `NOMAD_HOST`: the Nomad host address (e.g., `http://example.com:4646`)
 - `NOMAD_JOB_ID`: the Nomad Job ID to dispatch
 - `NOMAD_TOKEN`: the Nomad token (requires permission to dispatch jobs)
+
+```sh
+docker run -d --restart always --name nomad-github-runners-autoscaler \
+  -e PORT="8080" \
+  -e GH_WEBHOOK_SECRET="mysecret" \
+  -e NOMAD_HOST="http://127.0.0.1:4646" \
+  -e NOMAD_JOB_ID="github_runner" \
+  -e NOMAD_TOKEN="foo" \
+  -e GH_WEBHOOK_SECRET="bar" \
+  jrsyo/nomad-github-runners-autoscaler:alpha
+```
 
 ## Deploy to Nomad cluster
 
@@ -76,7 +91,7 @@ job "gh_webhook_server" {
             }
 
             config {
-                image = "jrsyo/gh-actions-webhooks-dispatch-nomad-jobs:alpha"
+                image = "jrsyo/nomad-github-runners-autoscaler:alpha"
                 ports = [
                     "http",
                 ]
