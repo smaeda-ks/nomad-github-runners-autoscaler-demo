@@ -1,6 +1,8 @@
 node_modules
 
-vault
-
 logs
 *.log
+
+README.md
+LICENSE
+docs
