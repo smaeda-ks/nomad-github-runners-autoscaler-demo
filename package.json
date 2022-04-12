@@ -1,0 +1,21 @@
+{
+  "name": "nomad-github-runners-autoscaler",
+  "version": "0.0.1",
+  "description": "A demo-purpose Node.js application that listens to the GitHub Webhooks event (workflow_job.queued) and dispatches Nomad parameterized jobs using Nomad HTTP API to launch \"on-demand\" GitHub Actions Self-hosted Runners easily and efficiently.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/webhooks": "^9.23.0",
+    "got": "^12.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
