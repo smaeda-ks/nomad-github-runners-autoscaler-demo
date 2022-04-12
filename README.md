@@ -8,7 +8,7 @@ This application implements the suggested autoscaling pattern mentioned in the G
 
 ### (optional) Horizontal Nomad Cluster Autoscaling
 
-While this demo app shows you a conceptual way to auto-scale GitHub Actions Self-hosted runners on your Nomad Cluster, you may also want to ensure that there is always an appropriate amount of Nomad cluster resource to run your runners' workload at scale. This is achievable by using [Nomad Autoscaler](https://www.nomadproject.io/tools/autoscaling).
+While this demo app shows you a conceptual way of auto-scaling GitHub Actions Self-hosted runners on your Nomad Cluster, you may also want to ensure that there is always an appropriate amount of Nomad cluster resource to run your runners' workload at scale. This is achievable by using [Nomad Autoscaler](https://www.nomadproject.io/tools/autoscaling).
 
 ## Deploy to Docker
 
@@ -75,6 +75,7 @@ job "gh_webhook_server" {
         task "app" {
             driver = "docker"
 
+            # fetch secrets from Vault KV secret engine
             template {
                 env = true
                 destination = "secret/gh-webhook-server.env"
@@ -105,6 +106,10 @@ job "gh_webhook_server" {
 
 See [myoung34/docker-github-actions-runner](https://github.com/myoung34/docker-github-actions-runner) for more details about configuration options.
 
+In this example job file, `GH_REPO_URL` is defined as a required metadata key. This metadata value is used in the `env` stanza to pass the `REPO_URL` environment variable dynamically, so the demo app [always sends](https://github.com/smaeda-ks/nomad-github-runners-autoscaler-demo/blob/main/nomad.js) this metadata when calling the [`Dispatch Job`](https://www.nomadproject.io/api-docs/jobs#dispatch-job) Nomad HTTP API endpoint. This way, we can have a reusable job definition across your repositories.
+
+Also, as a possible improvement, by further utilizing the Actions `runs-on:` [custom labels](https://docs.github.com/en/actions/hosting-your-own-runners/using-self-hosted-runners-in-a-workflow#routing-precedence-for-self-hosted-runners), you could send as many arbitrary metadata for parameterized jobs. This might be useful to limit jobs [resources](https://www.nomadproject.io/docs/job-specification/resources) (e.g., cpu/memory) as well as have fine control of the target nodes with [constraint](https://www.nomadproject.io/docs/job-specification/constraint) and/or [affinity](https://www.nomadproject.io/docs/job-specification/affinity), for instance.
+
 ```hcl
 job "github_runner" {
     datacenters = ["dc1"]
@@ -125,6 +130,7 @@ job "github_runner" {
         task "runner" {
             driver = "docker"
 
+            # fetch secrets from Vault KV secret engine
             template {
                 env = true
                 destination = "secret/vault.env"
