@@ -5,17 +5,21 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"test commnad is not implemented\" && exit 0",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@octokit/webhooks": "^9.23.0",
-    "got": "^12.0.3"
+    "@octokit/webhooks": "^9.24.0",
+    "got": "^12.1.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.16"
+  },
+  "nodemonConfig": {
+    "ext": "js",
+    "delay": 2500
   }
 }
