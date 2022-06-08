@@ -155,6 +155,7 @@ job "github_runner" {
                 privileged  = true
                 userns_mode = "host"
 
+                # Allow DooD (Docker outside of Docker)
                 volumes = [
                     "/var/run/docker.sock:/var/run/docker.sock",
                 ]
@@ -163,3 +164,21 @@ job "github_runner" {
     }
 }
 ```
+
+### GitHub PAT (Personal Access Token) vs GitHub Apps
+
+The Nomad job file above requires a valid GitHub PAT (Personal Access Token) in order to register a new Runner to a given GitHub repository.
+
+While this works fine, PAT is a static and long-lived secret that you may want to avoid sharing across teams. Therefore, GitHub actually recommends using GitHub Apps and generating a short-lived token instead.
+
+To do so, since the `myoung34/docker-github-actions-runner` Docker image currently [doesn't support](https://github.com/myoung34/docker-github-actions-runner/pull/205) authenticating with GitHub Apps upon start-up, you can do a little hack using Nomad's [init task pattern](https://www.nomadproject.io/docs/job-specification/lifecycle#init-task-pattern) to generate a token in the `prestart` lifecycle stage.
+
+See an example [here](https://github.com/smaeda-ks/nomad-github-runners-autoscaler-demo/blob/main/nomad-jobs/gha-runner-github-apps.nomad).
+
+### Docker in Docker
+
+The GitHub Runner itself doesn't support DinD (Docker in Docker):
+https://github.com/actions/runner/issues/406
+
+But you could do DooD (Docker outside of Docker) instead:
+https://github.com/actions/runner/issues/406#issuecomment-876283668
