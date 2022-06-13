@@ -20,7 +20,7 @@ You may use a pre-built example `jrsyo/nomad-github-runners-autoscaler:alpha` im
 
 The following environment variables should be passed accordingly to run this app container.
 
-- `PORT`: the port number
+- `PORT`: the port number the server will listen on in the container (default: `3000`)
 - `GH_WEBHOOK_SECRET`: your configured GitHub Webhook secret
 - `NOMAD_HOST`: the Nomad host address (e.g., `http://example.com:4646`)
 - `NOMAD_JOB_ID`: the Nomad Job ID to dispatch
@@ -32,7 +32,6 @@ docker run -d --restart always --name nomad-github-runners-autoscaler \
   -e NOMAD_HOST="http://127.0.0.1:4646" \
   -e NOMAD_JOB_ID="github_runner" \
   -e NOMAD_TOKEN="foo" \
-  -e GH_WEBHOOK_SECRET="bar" \
   -p 8080:3000 \
   jrsyo/nomad-github-runners-autoscaler:alpha
 ```
