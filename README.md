@@ -28,12 +28,12 @@ The following environment variables should be passed accordingly to run this app
 
 ```sh
 docker run -d --restart always --name nomad-github-runners-autoscaler \
-  -e PORT="8080" \
   -e GH_WEBHOOK_SECRET="mysecret" \
   -e NOMAD_HOST="http://127.0.0.1:4646" \
   -e NOMAD_JOB_ID="github_runner" \
   -e NOMAD_TOKEN="foo" \
   -e GH_WEBHOOK_SECRET="bar" \
+  -p 8080:3000 \
   jrsyo/nomad-github-runners-autoscaler:alpha
 ```
 
